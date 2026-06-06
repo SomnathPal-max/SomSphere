@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer utilities {
+  .animate-focus-pulse {
+    animation: focus-pulse 2.5s infinite ease-in-out;
+  }
+  @keyframes focus-pulse {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.0);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    50% {
+      box-shadow: 0 0 35px 2px rgba(139, 92, 246, 0.35);
+      border-color: rgba(139, 92, 246, 0.4);
+    }
+  }
+  .glass-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+  }
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .transform-style-3d {
+    transform-style: preserve-3d;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  .-rotate-y-180 {
+    transform: rotateY(-180deg);
+  }
+}
+
+body {
+  @apply bg-[#0D0D14] text-gray-100 font-sans antialiased;
+  background: radial-gradient(circle at 0% 0%, #21005D 0%, #0D0D14 50%), radial-gradient(circle at 100% 100%, #4F378B 0%, #0D0D14 50%);
+  background-attachment: fixed;
+}
+
+/* Theme Palette Overrides */
+body.theme-emerald {
+  --color-pink-300: var(--color-emerald-300);
+  --color-pink-400: var(--color-emerald-400);
+  --color-pink-500: var(--color-emerald-500);
+  --color-pink-600: var(--color-emerald-600);
+  --color-violet-500: var(--color-teal-500);
+  --color-violet-600: var(--color-teal-600);
+  --color-violet-700: var(--color-teal-700);
+  background: radial-gradient(circle at 0% 0%, #064e3b 0%, #0D0D14 50%), radial-gradient(circle at 100% 100%, #115e59 0%, #0D0D14 50%);
+  background-attachment: fixed;
+}
+
+body.theme-amber {
+  --color-pink-300: var(--color-amber-300);
+  --color-pink-400: var(--color-amber-400);
+  --color-pink-500: var(--color-amber-500);
+  --color-pink-600: var(--color-amber-600);
+  --color-violet-500: var(--color-orange-500);
+  --color-violet-600: var(--color-orange-600);
+  --color-violet-700: var(--color-orange-700);
+  background: radial-gradient(circle at 0% 0%, #78350f 0%, #0D0D14 50%), radial-gradient(circle at 100% 100%, #9a3412 0%, #0D0D14 50%);
+  background-attachment: fixed;
+}
+
+body.theme-sky {
+  --color-pink-300: var(--color-sky-300);
+  --color-pink-400: var(--color-sky-400);
+  --color-pink-500: var(--color-sky-500);
+  --color-pink-600: var(--color-sky-600);
+  --color-violet-500: var(--color-blue-500);
+  --color-violet-600: var(--color-blue-600);
+  --color-violet-700: var(--color-blue-700);
+  background: radial-gradient(circle at 0% 0%, #1e3a8a 0%, #0D0D14 50%), radial-gradient(circle at 100% 100%, #1d4ed8 0%, #0D0D14 50%);
+  background-attachment: fixed;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Light Theme Inversion Hack */
+body.light-theme {
+  filter: invert(1) hue-rotate(180deg);
+  background-color: #f8fafc;
+}
+
+body.light-theme img,
+body.light-theme video {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+

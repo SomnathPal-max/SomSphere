@@ -1,0 +1,24 @@
+{
+  "name": "SomSphere Student Space",
+  "short_name": "SomSphere",
+  "description": "SomSphere All-in-One Student Workspace & Productivity Center",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0D0D14",
+  "theme_color": "#EC4899",
+  "orientation": "any",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "https://img.icons8.com/color/192/000000/google-planet.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://img.icons8.com/color/512/000000/google-planet.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

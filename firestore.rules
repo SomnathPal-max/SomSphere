@@ -1,0 +1,201 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isOwner(data) {
+      return data.ownerId == request.auth.uid;
+    }
+
+    // Validation helpers.
+    function isValidAssignment(data) {
+      return data.keys().hasAll(['title', 'ownerId']) 
+         && data.title is string && data.title.size() > 0 && data.title.size() <= 200
+         && data.ownerId is string && data.ownerId == request.auth.uid;
+    }
+
+    function isValidTimetable(data) {
+      return data.keys().hasAll(['day', 'startTime', 'endTime', 'ownerId'])
+         && data.day is string && data.day.size() > 0 && data.day.size() <= 50
+         && data.startTime is string && data.startTime.size() > 0 && data.startTime.size() <= 50
+         && data.endTime is string && data.endTime.size() > 0 && data.endTime.size() <= 50
+         && data.ownerId is string && data.ownerId == request.auth.uid;
+    }
+
+    function isValidExam(data) {
+      return data.keys().hasAll(['title', 'date', 'ownerId'])
+         && data.title is string && data.title.size() > 0 && data.title.size() <= 200
+         && data.date is string && data.date.size() > 0 && data.date.size() <= 50
+         && data.ownerId is string && data.ownerId == request.auth.uid;
+    }
+
+    function isValidCourse(data) {
+      return data.keys().hasAll(['name', 'grade', 'ownerId'])
+         && data.name is string && data.name.size() > 0 && data.name.size() <= 200
+         && data.grade is string && data.grade.size() > 0 && data.grade.size() <= 10
+         && data.ownerId is string && data.ownerId == request.auth.uid;
+    }
+
+    function isValidNote(data) {
+      return data.keys().hasAll(['title', 'content', 'ownerId'])
+         && data.title is string && data.title.size() > 0 && data.title.size() <= 200
+         && data.content is string && data.content.size() <= 500000
+         && data.ownerId is string && data.ownerId == request.auth.uid;
+    }
+
+    function isValidExpense(data) {
+      return data.keys().hasAll(['amount', 'description', 'ownerId'])
+         && data.amount is number
+         && data.description is string && data.description.size() > 0 && data.description.size() <= 500
+         && data.ownerId is string && data.ownerId == request.auth.uid;
+    }
+
+    function isValidFlashcardDeck(data) {
+      return data.keys().hasAll(['title', 'ownerId'])
+         && data.title is string && data.title.size() > 0 && data.title.size() <= 200
+         && data.ownerId is string && data.ownerId == request.auth.uid;
+    }
+
+    function isValidHabit(data) {
+      return data.keys().hasAll(['name', 'ownerId'])
+         && data.name is string && data.name.size() > 0 && data.name.size() <= 200
+         && (!data.keys().hasAll(['targetGoal']) || data.targetGoal is number)
+         && data.ownerId is string && data.ownerId == request.auth.uid;
+    }
+
+    function isValidHabitLog(data) {
+      return data.keys().hasAll(['habitId', 'date', 'ownerId'])
+         && data.habitId is string && data.habitId.size() > 0 && data.habitId.size() <= 128
+         && data.date is string && data.date.size() > 0 && data.date.size() <= 50
+         && data.ownerId is string && data.ownerId == request.auth.uid;
+    }
+
+    function isValidAnnouncement(data) {
+      return data.keys().hasAll(['ownerId', 'title'])
+         && data.title is string && data.title.size() > 0 && data.title.size() <= 1000
+         && data.ownerId is string && data.ownerId == request.auth.uid;
+    }
+
+    function isValidSmartFile(data) {
+      return data.keys().hasAll(['name', 'mimeType', 'size', 'modifiedTime', 'ownerId'])
+         && data.name is string && data.name.size() > 0 && data.name.size() <= 300
+         && data.mimeType is string && data.mimeType.size() > 0 && data.mimeType.size() <= 100
+         && data.size is string && data.size.size() > 0 && data.size.size() <= 50
+         && data.modifiedTime is string && data.modifiedTime.size() > 0 && data.modifiedTime.size() <= 50
+         && data.ownerId is string && data.ownerId == request.auth.uid;
+    }
+
+    match /assignments/{id} {
+      allow read: if isSignedIn() && isOwner(existing());
+      allow create: if isSignedIn() && isValidId(id) && isValidAssignment(incoming());
+      allow update: if isSignedIn() && isValidId(id) && isOwner(existing()) && isValidAssignment(incoming());
+      allow delete: if isSignedIn() && isValidId(id) && isOwner(existing());
+    }
+
+    match /timetable/{id} {
+      allow read: if isSignedIn() && isOwner(existing());
+      allow create: if isSignedIn() && isValidId(id) && isValidTimetable(incoming());
+      allow update: if isSignedIn() && isValidId(id) && isOwner(existing()) && isValidTimetable(incoming());
+      allow delete: if isSignedIn() && isValidId(id) && isOwner(existing());
+    }
+
+    match /exams/{id} {
+      allow read: if isSignedIn() && isOwner(existing());
+      allow create: if isSignedIn() && isValidId(id) && isValidExam(incoming());
+      allow update: if isSignedIn() && isValidId(id) && isOwner(existing()) && isValidExam(incoming());
+      allow delete: if isSignedIn() && isValidId(id) && isOwner(existing());
+    }
+
+    match /courses/{id} {
+      allow read: if isSignedIn() && isOwner(existing());
+      allow create: if isSignedIn() && isValidId(id) && isValidCourse(incoming());
+      allow update: if isSignedIn() && isValidId(id) && isOwner(existing()) && isValidCourse(incoming());
+      allow delete: if isSignedIn() && isValidId(id) && isOwner(existing());
+    }
+
+    match /notes/{id} {
+      allow read: if isSignedIn() && isOwner(existing());
+      allow create: if isSignedIn() && isValidId(id) && isValidNote(incoming());
+      allow update: if isSignedIn() && isValidId(id) && isOwner(existing()) && isValidNote(incoming());
+      allow delete: if isSignedIn() && isValidId(id) && isOwner(existing());
+    }
+
+    match /expenses/{id} {
+      allow read: if isSignedIn() && isOwner(existing());
+      allow create: if isSignedIn() && isValidId(id) && isValidExpense(incoming());
+      allow update: if isSignedIn() && isValidId(id) && isOwner(existing()) && isValidExpense(incoming());
+      allow delete: if isSignedIn() && isValidId(id) && isOwner(existing());
+    }
+
+    match /flashcardDecks/{id} {
+      allow read: if isSignedIn() && isOwner(existing());
+      allow create: if isSignedIn() && isValidId(id) && isValidFlashcardDeck(incoming());
+      allow update: if isSignedIn() && isValidId(id) && isOwner(existing()) && isValidFlashcardDeck(incoming());
+      allow delete: if isSignedIn() && isValidId(id) && isOwner(existing());
+    }
+
+    match /habits/{id} {
+      allow read: if isSignedIn() && isOwner(existing());
+      allow create: if isSignedIn() && isValidId(id) && isValidHabit(incoming());
+      allow update: if isSignedIn() && isValidId(id) && isOwner(existing()) && isValidHabit(incoming());
+      allow delete: if isSignedIn() && isValidId(id) && isOwner(existing());
+    }
+
+    match /habitLogs/{id} {
+      allow read: if isSignedIn() && isOwner(existing());
+      allow create: if isSignedIn() && isValidId(id) && isValidHabitLog(incoming());
+      allow update: if isSignedIn() && isValidId(id) && isOwner(existing()) && isValidHabitLog(incoming());
+      allow delete: if isSignedIn() && isValidId(id) && isOwner(existing());
+    }
+
+    match /collegeNotices/{id} {
+      allow read, write: if true;
+    }
+
+    match /announcements/{id} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /smartFiles/{id} {
+      allow read: if isSignedIn() && isOwner(existing());
+      allow create: if isSignedIn() && isValidId(id) && isValidSmartFile(incoming());
+      allow update: if isSignedIn() && isValidId(id) && isOwner(existing()) && isValidSmartFile(incoming());
+      allow delete: if isSignedIn() && isValidId(id) && isOwner(existing());
+    }
+    function isValidBackup(data) {
+      return data.keys().hasAll(['ownerId', 'dateStr', 'timestamp', 'metadata', 'snapshot', 'version'])
+         && data.ownerId is string && data.ownerId == request.auth.uid
+         && data.dateStr is string
+         && data.timestamp is number
+         && data.metadata is map
+         && data.snapshot is string
+         && data.version is string;
+    }
+
+    match /backups/{id} {
+      allow read: if isSignedIn() && isOwner(existing());
+      allow create: if isSignedIn() && isValidId(id) && isOwner(incoming());
+      allow update: if isSignedIn() && isValidId(id) && isOwner(existing()) && isOwner(incoming());
+      allow delete: if isSignedIn() && isValidId(id) && isOwner(existing());
+    }
+  }
+}

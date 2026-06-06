@@ -1,0 +1,140 @@
+{
+  "entities": {
+    "Assignment": {
+      "title": "Assignment",
+      "description": "Student task or assignment",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "subject": { "type": "string" },
+        "dueDate": { "type": "string" },
+        "priority": { "type": "string" },
+        "status": { "type": "string" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["title", "ownerId"]
+    },
+    "Timetable": {
+      "title": "Timetable",
+      "description": "Scheduled time slots for learning",
+      "type": "object",
+      "properties": {
+        "day": { "type": "string" },
+        "startTime": { "type": "string" },
+        "endTime": { "type": "string" },
+        "subject": { "type": "string" },
+        "type": { "type": "string" },
+        "location": { "type": "string" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["day", "startTime", "endTime"]
+    },
+    "Exam": {
+      "title": "Exam",
+      "description": "Upcoming exam details",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "date": { "type": "string" },
+        "subject": { "type": "string" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["title", "date"]
+    },
+    "Course": {
+      "title": "Course",
+      "description": "Academic course for tracking grades",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "creditHours": { "type": "number" },
+        "grade": { "type": "string" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["name", "grade"]
+    },
+    "Note": {
+      "title": "Note",
+      "description": "Personal note",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "folder": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["title", "content"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "Financial expense",
+      "type": "object",
+      "properties": {
+        "amount": { "type": "number" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "date": { "type": "string" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["amount", "description"]
+    },
+    "FlashcardDeck": {
+      "title": "FlashcardDeck",
+      "description": "A deck of flashcards for study",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "cards": { "type": "array" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["title"]
+    },
+    "Habit": {
+      "title": "Habit",
+      "description": "A tracked habit",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["name"]
+    },
+    "HabitLog": {
+      "title": "HabitLog",
+      "description": "A log of a habit on a specific date",
+      "type": "object",
+      "properties": {
+        "habitId": { "type": "string" },
+        "date": { "type": "string" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["habitId", "date"]
+    },
+    "Announcement": {
+      "title": "Announcement",
+      "description": "Campus announcements",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "body": { "type": "string" },
+        "category": { "type": "string" },
+        "postedAt": { "type": "string" },
+        "pinned": { "type": "boolean" },
+        "ownerId": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/assignments/{assignmentId}": { "schema": { "$ref": "#/entities/Assignment" }, "description": "Assignments" },
+    "/timetable/{id}": { "schema": { "$ref": "#/entities/Timetable" }, "description": "Timetable slots" },
+    "/exams/{id}": { "schema": { "$ref": "#/entities/Exam" }, "description": "Exams" },
+    "/courses/{id}": { "schema": { "$ref": "#/entities/Course" }, "description": "Courses" },
+    "/notes/{id}": { "schema": { "$ref": "#/entities/Note" }, "description": "Notes" },
+    "/expenses/{id}": { "schema": { "$ref": "#/entities/Expense" }, "description": "Expenses" },
+    "/flashcardDecks/{id}": { "schema": { "$ref": "#/entities/FlashcardDeck" }, "description": "Flashcard Decks" },
+    "/habits/{id}": { "schema": { "$ref": "#/entities/Habit" }, "description": "Habits" },
+    "/habitLogs/{id}": { "schema": { "$ref": "#/entities/HabitLog" }, "description": "Habit logs" },
+    "/announcements/{id}": { "schema": { "$ref": "#/entities/Announcement" }, "description": "Announcements" }
+  }
+}

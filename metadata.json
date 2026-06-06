@@ -1,0 +1,10 @@
+{
+  "name": "SomSphere",
+  "description": "A premium Smart Campus Dashboard centralizing scheduling, AI assistance, study tools, finances, and collaboration.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
